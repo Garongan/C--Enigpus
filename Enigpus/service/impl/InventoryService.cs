@@ -2,12 +2,17 @@
 
 public class InventoryService : service.IInventoryService
 {
-    public void AddBook(string title, string publisher, int year, string? author)
+    public void AddBook(Book book)
     {
         throw new NotImplementedException();
     }
 
-    public Book SearchBook(string title)
+    public Book? SearchBook(string title)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Book? GetBookById(string code)
     {
         throw new NotImplementedException();
     }
@@ -17,7 +22,7 @@ public class InventoryService : service.IInventoryService
         throw new NotImplementedException();
     }
 
-    public Book UpdateBook(string code)
+    public Book UpdateBook(Book book)
     {
         throw new NotImplementedException();
     }
