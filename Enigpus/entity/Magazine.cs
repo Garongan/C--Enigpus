@@ -1,6 +1,6 @@
 ﻿namespace Enigpus;
 
-public class Magazine : Books
+public class Magazine : Book
 {
     
 }

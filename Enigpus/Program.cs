@@ -18,7 +18,7 @@ public static class Program
 {
     public static void Main(string[] args)
     {
-        var run = new Run();
+        var run = new Menu();
         run.RunMenu();
     }
 }

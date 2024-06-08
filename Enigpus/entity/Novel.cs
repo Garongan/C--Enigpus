@@ -1,6 +1,6 @@
 ﻿namespace Enigpus;
 
-public class Novel : Books
+public class Novel : Book
 {
-    public string? Writer { get; set; }
+    public string? Author { get; set; }
 }

@@ -1,13 +1,13 @@
 ﻿namespace Enigpus;
 
-public abstract class Books
+public abstract class Book
 {
     public string? Code { get; set; }
     public string? Title { get; set; }
     public string? Publisher { get; set; }
-    public DateTime PublishDate { get; set; }
+    public int Year { get; set; }
 
-    public string getTitle()
+    public string GetTitle()
     {
         return Title ?? "";
     }
