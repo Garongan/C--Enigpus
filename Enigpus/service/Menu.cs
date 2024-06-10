@@ -6,6 +6,7 @@ namespace Enigpus.service;
 public class Menu
 {
     private readonly string _split = new string('-', 50);
+    private const string LeaveIt = "Press Enter if you want to insert blank information";
     private readonly IInventoryService _inventoryService = new InventoryService();
 
     public void RunMenu()
@@ -29,7 +30,7 @@ public class Menu
             }
             catch
             {
-                selection = 0;
+                selection = -1;
             }
 
             switch (selection)
@@ -91,6 +92,7 @@ public class Menu
 
     private void AddBookMenu(int type)
     {
+        Console.WriteLine(LeaveIt);
         Console.Write("Input Title: ");
         var title = Console.ReadLine() ?? null;
         Console.Write("Input Publisher: ");
@@ -101,9 +103,9 @@ public class Menu
         {
             year = int.Parse(Console.ReadLine() ?? string.Empty);
         }
-        catch
+        catch (Exception e)
         {
-            Console.WriteLine("Invalid Year Input");
+            Console.WriteLine($"Invalid Year Input: {e.StackTrace}");
             return;
         }
 
@@ -111,7 +113,7 @@ public class Menu
         {
             case 1:
             {
-                Console.Write("Input Author");
+                Console.Write("Input Author: ");
                 var author = Console.ReadLine();
                 var novel = new Novel();
                 if (title is not null) novel.Title = title;
@@ -140,12 +142,17 @@ public class Menu
         Console.WriteLine(_split);
         Console.WriteLine("Search Book");
         Console.WriteLine(_split);
+        Console.WriteLine(LeaveIt);
         Console.Write("Input the Book Title: ");
         var title = Console.ReadLine();
         if (title is null) return;
-        var book = _inventoryService.SearchBook(title);
-        if (book is null) return;
-        Console.WriteLine(book.ToString());
+        var books = _inventoryService.SearchBook(title);
+        Console.WriteLine(_split);
+        foreach (var book in books)
+        {
+            Console.WriteLine(book.ToString());
+            Console.WriteLine(_split);
+        }
     }
 
     private void GetAllBook()
@@ -154,9 +161,17 @@ public class Menu
         Console.WriteLine("Get All Book");
         Console.WriteLine(_split);
         var books = _inventoryService.GetAllBook();
-        foreach (var book in books)
+        if (books.Count < 1)
         {
-            Console.WriteLine(book.ToString());
+            Console.WriteLine("Empty List Of Book");
+        }
+        else
+        {
+            foreach (var book in books)
+            {
+                Console.WriteLine(book.ToString());
+                Console.WriteLine(_split);
+            }
         }
     }
 
@@ -194,7 +209,8 @@ public class Menu
 
     private void UpdateBookMenu(int type)
     {
-        Console.Write("Search Book Title: ");
+        Console.WriteLine(LeaveIt);
+        Console.Write("Input Book ID: ");
         var search = Console.ReadLine();
         if (search is null) return;
         var book = _inventoryService.GetBookById(search);
@@ -211,8 +227,7 @@ public class Menu
         }
         catch
         {
-            Console.WriteLine("Invalid Year Input");
-            return;
+            year = 0;
         }
 
         switch (type)
@@ -226,9 +241,8 @@ public class Menu
                 if (publisher is not null) novel.Publisher = publisher;
                 if (year is not 0) novel.Year = year;
                 if (author is not null) novel.Author = author;
-                var updateBook = _inventoryService.UpdateBook(novel);
-                Console.WriteLine(_split);
-                Console.WriteLine(updateBook.ToString());
+                _inventoryService.UpdateBook(novel);
+                Console.WriteLine("Success Updated Novel");
             }
                 break;
             case 2:
@@ -237,9 +251,8 @@ public class Menu
                 if (title is not null) magazine.Title = title;
                 if (publisher is not null) magazine.Publisher = publisher;
                 if (year is not 0) magazine.Year = year;
-                var updateBook = _inventoryService.UpdateBook(magazine);
-                Console.WriteLine(_split);
-                Console.WriteLine(updateBook.ToString());
+                _inventoryService.UpdateBook(magazine);
+                Console.WriteLine("Success Updated Magazine");
             }
                 break;
         }
@@ -250,9 +263,11 @@ public class Menu
         Console.WriteLine(_split);
         Console.WriteLine("Delete Book");
         Console.WriteLine(_split);
-        Console.Write("Search Book Title: ");
+        Console.WriteLine(LeaveIt);
+        Console.Write("Input Book ID: ");
         var search = Console.ReadLine();
-        if (search is null) return;
+        Console.WriteLine(search);
+        if (search is "" or null) return;
         var book = _inventoryService.GetBookById(search);
         if (book?.Code != null) _inventoryService.DeleteBook(book.Code);
     }
